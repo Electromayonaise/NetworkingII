@@ -2,12 +2,13 @@ import java.io.*;
 import java.net.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.StringTokenizer;
 
 public final class ServidorWebII {
     public static void main(String argv[]) throws Exception {
         int puerto = 6789;
         ServerSocket serverSocket = new ServerSocket(puerto);
-        ExecutorService executor = Executors.newFixedThreadPool(3);
+        ExecutorService executor = Executors.newFixedThreadPool(10); 
 
         while (true) {
             Socket sc = serverSocket.accept();
@@ -47,8 +48,13 @@ final class SolicitudHttp implements Runnable {
         System.out.println("Solicitud recibida: " + lineaDeSolicitud);
 
         StringTokenizer partesLinea = new StringTokenizer(lineaDeSolicitud);
-        partesLinea.nextToken();  // "salta" sobre el método, se supone que debe ser "GET"
+        partesLinea.nextToken(); 
         String nombreArchivo = partesLinea.nextToken();
+
+        if (nombreArchivo.equals("/")) {
+            nombreArchivo = "/index.html"; 
+        }
+
         nombreArchivo = "." + nombreArchivo;
 
         FileInputStream fis = null;
@@ -78,8 +84,11 @@ final class SolicitudHttp implements Runnable {
         os.writeBytes(CRLF);
 
         if (existeArchivo) {
-            enviarBytes(fis, os);
-            fis.close();
+            try {
+                sendBytes(fis, os);
+            } finally {
+                fis.close(); 
+            }
         } else {
             os.writeBytes(cuerpoMensaje);
         }
@@ -88,9 +97,9 @@ final class SolicitudHttp implements Runnable {
         br.close();
     }
 
-    private static void enviarBytes(FileInputStream fis, OutputStream os) throws Exception {
+    private static void sendBytes(FileInputStream fis, OutputStream os) throws IOException {
         byte[] buffer = new byte[1024];
-        int bytes = 0;
+        int bytes;
         while ((bytes = fis.read(buffer)) != -1) {
             os.write(buffer, 0, bytes);
         }
@@ -105,6 +114,9 @@ final class SolicitudHttp implements Runnable {
         }
         if (nombreArchivo.endsWith(".jpeg") || nombreArchivo.endsWith(".jpg")) {
             return "image/jpeg";
+        }
+        if (nombreArchivo.endsWith(".png")) {
+            return "image/png";
         }
         return "application/octet-stream";
     }
