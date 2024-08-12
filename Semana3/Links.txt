@@ -1,0 +1,4 @@
+
+Refactoring - Design Patterns: https://refactoring.guru
+IOC Container: https://www.baeldung.com/inversion-control-and-dependency-injection-in-spring
+Spring Annotations: https://www.techferry.com/articles/spring-annotations.html
