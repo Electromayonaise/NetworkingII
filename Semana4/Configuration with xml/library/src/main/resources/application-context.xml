@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  
+    <bean id="BookRepository" class="springles.library.repositories.BookRepository">
+    </bean>
+
+    <bean id="BookService" class="springles.library.services.BookService">
+        <constructor-arg name="bookRepository" ref="BookRepository"> </constructor-arg>  
+    </bean>
+
+    <bean id="Editorial pro 1" class="springles.library.model.Publisher">
+    <constructor-arg name="id" value="1" />
+    <constructor-arg name="name" value="Editorial pro 1"/>
+    <constructor-arg name="address" value="calle pro"/>
+    </bean>
+
+    <bean id="Editorial pro 2" class="springles.library.model.Publisher">
+    <constructor-arg name="id" value="2" />
+    <constructor-arg name="name" value="Editorial pro 2"/>
+    <constructor-arg name="address" value="calle pro"/>
+    </bean>
+
+    <bean id="Editorial pro 3" class="springles.library.model.Publisher">
+    <constructor-arg name="id" value="3" />
+    <constructor-arg name="name" value="Editorial pro 3"/>
+    <constructor-arg name="address" value="Calle pro"/>
+    </bean>
+
+
+
+
+
+</beans>
